@@ -24,7 +24,7 @@ public class BibleBooksIntroductionCreator {
 	public static boolean formatXML = true;
 	public static String sourceDirectory;
 	public static String outputFile;
-	public static Properties DICTIONARY_DETAILS = null;
+	public static Properties BOOK_DETAILS = null;
 
 	/**
 	 * @param args
@@ -37,7 +37,7 @@ public class BibleBooksIntroductionCreator {
 		;
 
 		loadBookDetails();
-		if ("yes".equalsIgnoreCase(DICTIONARY_DETAILS.getProperty("createWordDocument"))) {
+		if ("yes".equalsIgnoreCase(BOOK_DETAILS.getProperty("createWordDocument"))) {
 			WordDocument.build();
 		}
 	}
@@ -72,12 +72,12 @@ public class BibleBooksIntroductionCreator {
 	}
 
 	private static void loadBookDetails() {
-		DICTIONARY_DETAILS = new Properties();
+		BOOK_DETAILS = new Properties();
 		BufferedReader propertyReader;
 		try {
 			File infoFile = new File(sourceDirectory + "//" + INFORMATION_FILE_NAME);
 			propertyReader = new BufferedReader(new InputStreamReader(new FileInputStream(infoFile), "UTF8"));
-			DICTIONARY_DETAILS.load(propertyReader);
+			BOOK_DETAILS.load(propertyReader);
 			propertyReader.close();
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();

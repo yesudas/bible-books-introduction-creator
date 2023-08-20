@@ -86,7 +86,7 @@ public class WordDocument {
 			paragraph = document.createParagraph();
 			paragraph.setAlignment(ParagraphAlignment.CENTER);
 			// run = paragraph.createRun();
-			// run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_HEADER_FONT));
+			// run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_HEADER_FONT));
 			// run.setFontSize(getFontSize(Constants.STR_HEADER_FONT_SIZE) + 8);
 			// run.setBold(true);
 			// run.setText(word);
@@ -148,18 +148,18 @@ public class WordDocument {
 			paragraph.setAlignment(ParagraphAlignment.BOTH);
 		}
 		XWPFRun run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
 		run.setFontSize(getFontSize(Constants.STR_CONTENT_FONT_SIZE));
 		run.setBold(isBold);
 		run.setText(line);
 	}
 
 	private static int getFontSize(String key) {
-		if (BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(key) == null) {
+		if (BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(key) == null) {
 			return DEFAULT_FONT_SIZE;
 		} else {
 			try {
-				return (Integer.parseInt(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(key)));
+				return (Integer.parseInt(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(key)));
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 				return DEFAULT_FONT_SIZE;
@@ -174,7 +174,7 @@ public class WordDocument {
 		// paragraph.setStyle("Heading 3");
 		// paragraph.setAlignment(ParagraphAlignment.CENTER);
 		XWPFRun run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
 		run.setFontSize(getFontSize(Constants.STR_CONTENT_FONT_SIZE) + 2);
 		run.setBold(true);
 		run.setText(line);
@@ -187,7 +187,7 @@ public class WordDocument {
 		// paragraph.setStyle("Heading 2");
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		XWPFRun run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
 		run.setFontSize(getFontSize(Constants.STR_CONTENT_FONT_SIZE) + 4);
 		run.setBold(true);
 		run.setText(line);
@@ -210,7 +210,7 @@ public class WordDocument {
 		// paragraph.setAlignment(ParagraphAlignment.BOTH);
 		// }
 		XWPFRun run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
 		run.setFontSize(getFontSize(Constants.STR_CONTENT_FONT_SIZE) + 6);
 		run.setBold(true);
 		run.setText(line);
@@ -225,25 +225,26 @@ public class WordDocument {
 
 		// Dictionary Details - Label
 		run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_HEADER_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_HEADER_FONT));
 		run.setFontSize(getFontSize(Constants.STR_HEADER_FONT_SIZE));
 		run.setBold(true);
-		run.setText(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_DESCRIPTION_TITLE));
+		run.setText(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_DESCRIPTION_TITLE));
 
 		// Dictionary Details - Content
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.LEFT);
 		run = paragraph.createRun();
 		run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_HEADER_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_HEADER_FONT));
 		run.setFontSize(getFontSize(Constants.STR_HEADER_FONT_SIZE));
-		run.setText(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_DESCRIPTION));
+		run.setText(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_DESCRIPTION));
 
 		// run.addBreak(BreakType.PAGE);
 		addSectionBreak(document, 1, false);
 	}
 
 	private static void createPageSettings(XWPFDocument document) {
+		
 		CTDocument1 doc = document.getDocument();
 		CTBody body = doc.getBody();
 
@@ -251,24 +252,86 @@ public class WordDocument {
 			body.addNewSectPr();
 		}
 
-		CTSectPr section = body.getSectPr();
+		CTSectPr ctSectPr = body.getSectPr();
 
-		if (!section.isSetPgSz()) {
-			section.addNewPgSz();
+	    CTPageSz pageSize;
+		if (!ctSectPr.isSetPgSz()) {
+			pageSize = ctSectPr.addNewPgSz();
+		}else {
+			pageSize = ctSectPr.getPgSz();
 		}
-		CTPageSz pageSize = section.getPgSz();
+		
 		pageSize.setOrient(STPageOrientation.PORTRAIT);
-		pageSize.setW(BigInteger.valueOf(595 * 20));
-		pageSize.setH(BigInteger.valueOf(842 * 20));
+		
+		//double width_cm = Math.round(pageSize.getW().doubleValue()/20d/72d*2.54d*100d)/100d;
+        //double height_cm = Math.round(pageSize.getH().doubleValue()/20d/72d*2.54d*100d)/100d;
+		
+		String strPageSize = BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_PAGE_SIZE);
+		if("B5".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_B5_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_B5_H * 20));
+		}else if("B4".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_B4_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_B4_H * 20));
+		}else if("A5".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_A5_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_A5_H * 20));
+		}else if("A4".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_A4_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_A4_H * 20));
+		}else if("A3".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_A3_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_A3_H * 20));
+		}else if("A2".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_A2_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_A2_H * 20));
+		}else if("A1".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_A1_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_A1_H * 20));
+		}else if("A0".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_A0_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_A0_H * 20));
+		}else if("Executive".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Executive_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Executive_H * 20));
+		}else if("Statement".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Statement_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Statement_H * 20));
+		}else if("Legal".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Legal_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Legal_H * 20));
+		}else if("Ledger".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Ledger_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Ledger_H * 20));
+		}else if("Tabloid".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Tabloid_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Tabloid_H * 20));
+		}else if("Letter".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Letter_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Letter_H * 20));
+		}else if("Folio".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Folio_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Folio_H * 20));
+		}else if("Quarto".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_Quarto_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_Quarto_H * 20));
+		}else if("10x14".equalsIgnoreCase(strPageSize)) {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_10x14_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_10x14_H * 20));
+		}else {
+			pageSize.setW(BigInteger.valueOf(Constants.PAGE_A4_W * 20));
+			pageSize.setH(BigInteger.valueOf(Constants.PAGE_A4_H * 20));
+		}
+		
+		setPageMargin(ctSectPr);
 		System.out.println("Page Setting completed");
 	}
 
 	private static void createMetaData(XWPFDocument document) {
 		CoreProperties props = document.getProperties().getCoreProperties();
 		// props.setCreated("2019-08-14T21:00:00z");
-		props.setLastModifiedByUser(
-				BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CREATOR));
-		props.setCreator(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CREATOR));
+		props.setLastModifiedByUser(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CREATOR));
+		props.setCreator(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CREATOR));
 		// props.setLastPrinted("2019-08-14T21:00:00z");
 		// props.setModified("2019-08-14T21:00:00z");
 		try {
@@ -287,9 +350,9 @@ public class WordDocument {
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_TITLE_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_TITLE_FONT));
 		run.setFontSize(getFontSize(Constants.STR_TITLE_FONT_SIZE));
-		run.setText(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_TITLE));
+		run.setText(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_TITLE));
 		run.addBreak();
 		run.addBreak();
 
@@ -297,9 +360,9 @@ public class WordDocument {
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_SUB_TITLE_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_SUB_TITLE_FONT));
 		run.setFontSize(getFontSize(Constants.STR_SUB_TITLE_FONT_SIZE));
-		run.setText(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_SUB_TITLE));
+		run.setText(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_SUB_TITLE));
 		run.addBreak();
 		run.addBreak();
 		run.addBreak();
@@ -313,9 +376,9 @@ public class WordDocument {
 		paragraph = document.createParagraph();
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_AUTHOR_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_AUTHOR_FONT));
 		run.setFontSize(getFontSize(Constants.STR_AUTHOR_FONT_SIZE));
-		run.setText(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_AUTHOR));
+		run.setText(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_AUTHOR));
 
 		run.addBreak(BreakType.PAGE);
 		System.out.println("Title Page Creation completed");
@@ -330,7 +393,7 @@ public class WordDocument {
 		run.addBreak();
 		run.addBreak();
 		run.addBreak();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CONTENT_FONT));
 		run.setFontSize(getFontSize(Constants.STR_CONTENT_FONT_SIZE) + 2);
 		run.setText(
 				"If you are using this PDF in mobile, Navigation by Index may not work with Google Drive's PDF viewer. I would recommend ReadEra App for better performance and navigation experience.");
@@ -356,13 +419,13 @@ public class WordDocument {
 
 		// Index Page Heading
 		run = paragraph.createRun();
-		run.setFontFamily(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_HEADER_FONT));
+		run.setFontFamily(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_HEADER_FONT));
 		run.setFontSize(getFontSize(Constants.STR_HEADER_FONT_SIZE));
-		String temp = BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_INDEX_TITLE);
+		String temp = BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_INDEX_TITLE);
 		if (temp == null || temp.isBlank()) {
 			run.setText("Index");
 		} else {
-			run.setText(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_INDEX_TITLE));
+			run.setText(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_INDEX_TITLE));
 		}
 
 		// Set background color
@@ -371,7 +434,7 @@ public class WordDocument {
 		// cTShd.setFill("ABABAB");
 
 		CTBookmark bookmark = paragraph.getCTP().addNewBookmarkStart();
-		bookmark.setName(BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_INDEX_TITLE));
+		bookmark.setName(BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_INDEX_TITLE));
 		bookmark.setId(BigInteger.valueOf(uniqueBookMarkCounter));
 		paragraph.getCTP().addNewBookmarkEnd().setId(BigInteger.valueOf(uniqueBookMarkCounter));
 		uniqueBookMarkCounter++;
@@ -385,13 +448,14 @@ public class WordDocument {
 			}
 			// String word = file.getName().substring(0, file.getName().lastIndexOf("."));
 			String word = getIndexWord(file);
-			if(word==null || word.isBlank()) {
-				System.out.println("First line of the file cannot be blank, it is being used as index titles in the Index Page.");
+			if (word == null || word.isBlank()) {
+				System.out.println(
+						"First line of the file cannot be blank, it is being used as index titles in the Index Page.");
 				BibleBooksIntroductionCreator.printHelpMessage();
 				return;
 			}
 			createAnchorLink(paragraph, word, word.replaceAll(" ", "_"), true, "",
-					BibleBooksIntroductionCreator.DICTIONARY_DETAILS.getProperty(Constants.STR_CONTENT_FONT),
+					BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CONTENT_FONT),
 					getFontSize(Constants.STR_CONTENT_FONT_SIZE));
 		}
 
@@ -462,19 +526,39 @@ public class WordDocument {
 		ctColumns.setNum(BigInteger.valueOf(noOfColumns));
 
 		if (setMargin) {
-			CTPageMar pageMar = ctSectPr.getPgMar();
-			if (pageMar == null) {
-				pageMar = ctSectPr.addNewPgMar();
-			}
-			pageMar.setLeft(BigInteger.valueOf(648));// 0.45"*72*20
-			// 720 TWentieths of an Inch Point (Twips) = 720/20 = 36 pt; 36/72 = 0.5"
-			pageMar.setRight(BigInteger.valueOf(648));
-			pageMar.setTop(BigInteger.valueOf(648));
-			pageMar.setBottom(BigInteger.valueOf(648));
-			// pageMar.setFooter(BigInteger.valueOf(720));
-			// pageMar.setHeader(BigInteger.valueOf(720));
-			// pageMar.setGutter(BigInteger.valueOf(0));
+			setPageMargin(ctSectPr);
 		}
 		return ctSectPr;
+	}
+
+	private static void setPageMargin(CTSectPr ctSectPr) {
+		CTPageMar pageMar = ctSectPr.getPgMar();
+		if (pageMar == null) {
+			pageMar = ctSectPr.addNewPgMar();
+		}
+
+		pageMar.setLeft(getMargin(Constants.STR_MARGIN_LEFT));
+		pageMar.setRight(getMargin(Constants.STR_MARGIN_RIGHT));
+		pageMar.setTop(getMargin(Constants.STR_MARGIN_TOP));
+		pageMar.setBottom(getMargin(Constants.STR_MARGIN_BOTTOM));
+		// pageMar.setFooter(BigInteger.valueOf(720));
+		// pageMar.setHeader(BigInteger.valueOf(720));
+		// pageMar.setGutter(BigInteger.valueOf(0));
+	}
+
+	private static BigInteger getMargin(String key) {
+		String temp = BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_MARGIN_TOP);
+		if (temp != null && !temp.isBlank()) {
+			try {
+				Double margin = Double.parseDouble(temp);
+				// 720 TWentieths of an Inch Point (Twips) = 720/20 = 36 pt; 36/72 = 0.5"
+				margin = margin * 72 * 20;
+				return BigInteger.valueOf(margin.intValue());
+			} catch (NumberFormatException e) {
+				System.out.println("Using default Margin since it is NOT set for " + key + " in the "
+						+ BibleBooksIntroductionCreator.INFORMATION_FILE_NAME + " file");
+			}
+		}
+		return BigInteger.valueOf(648);// 0.45"*72*20
 	}
 }
