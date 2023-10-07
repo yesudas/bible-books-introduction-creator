@@ -12,25 +12,39 @@ public class Constants {
 	public static final String STR_IDENTIFIER = "identifier";
 	public static final String STR_DESCRIPTION_TITLE = "descriptionTitle";
 	public static final String STR_DESCRIPTION = "description";
+	public static final String STR_CREATOR_TITLE = "creatorTitle";
 	public static final String STR_CREATOR = "creator";
 	public static final String STR_TITLE = "title";
+	public static final String STR_PUBLISHER_TITLE = "publisherTitle";
 	public static final String STR_PUBLISHER = "publisher";
-	public static final String STR_SUBJECT = "subject";
+	public static final String STR_SUBJECT = "title";
 	
 	//Word Document
-	public static final String STR_SUB_TITLE = "title";
+	public static final String STR_SUB_TITLE = "subTitle";
 	public static final String STR_TITLE_FONT = "titleFont";
 	public static final String STR_TITLE_FONT_SIZE = "titleFontSize";
 	public static final String STR_SUB_TITLE_FONT = "subTitleFont";
 	public static final String STR_SUB_TITLE_FONT_SIZE = "subTitleFontSize";
+	public static final String STR_BOOKDETAILS_FONT = "bookDetailsFont";
+	public static final String STR_BOOKDETAILS_FONT_SIZE = "bookDetailsFontSize";
+	public static final String STR_BOOK_EDITION = "bookEdition";
+	public static final String STR_AUTHOR_TITLE = "authorTitle";
+	public static final String STR_AUTHOR = "author";
 	public static final String STR_AUTHOR_FONT = "authorFont";
 	public static final String STR_AUTHOR_FONT_SIZE = "authorFontSize";
 	public static final String STR_HEADER_FONT = "headerFont";
 	public static final String STR_HEADER_FONT_SIZE = "headerFontSize";
 	public static final String STR_CONTENT_FONT = "contentFont";
 	public static final String STR_CONTENT_FONT_SIZE = "contentFontSize";
+	public static final String STR_COPYRIGHT_TITLE = "copyrightTitle";
+	public static final String STR_COPYRIGHT = "copyright";
+	public static final String STR_DOWNLOAD_TITLE = "downloadTitle";
+	public static final String STR_DOWNLOAD = "download";
+	public static final String STR_CONTACTUS_TITLE = "contactUsTitle";
+	public static final String STR_CONTACTUS = "contactUs";
+	public static final String STR_FOLLOWUS_TITLE = "followUsTitle";
+	public static final String STR_FOLLOWUS = "followUs";
 	
-	public static final String STR_AUTHOR = "author";
 	public static final String STR_INDEX_TITLE = "indexPageTitle";
 	
 	//Page settings

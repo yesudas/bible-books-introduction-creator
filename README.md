@@ -38,12 +38,12 @@ Creates MS Word document with title pages, index pages and content pages from te
   Exmple 2: 1-Genesis.txt, 2-Exodus.txt, etc
 
 ### Syntax to run this progam:
-    java -jar apply-regex-to-files.jar sourceDir=<Source Folder Name or Path> regexFile=<RegEx file name or file path>
+    java -jar bible-books-introduction-creator.jar <Source Folder Name or Path>
 
 Example 1: 
 
-    java -jar apply-regex-to-files.jar sourceDir=directory1 regexFile=regex.txt
+    java -jar bible-books-introduction-creator.jar directory1
 
 Example 2:
 
-    java -jar apply-regex-to-files.jar sourceDir="C:/somedirectory/directory1" regexFile="C:/somedirectory/regex-config.ini"
+    java -jar bible-books-introduction-creator.jar "C:/somedirectory/directory1"

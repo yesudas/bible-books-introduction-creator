@@ -63,7 +63,8 @@ public class BibleBooksIntroductionCreator {
 			}
 
 			if (sourceDirectory.contains("\\")) {
-				outputFile = sourceDirectory.substring(sourceDirectory.lastIndexOf("\\"), sourceDirectory.length());
+				outputFile = sourceDirectory.substring(sourceDirectory.lastIndexOf("\\"), sourceDirectory.length())
+						.replace("\\", "");
 			} else {
 				outputFile = sourceDirectory.substring(0, sourceDirectory.length());
 			}
@@ -94,30 +95,16 @@ public class BibleBooksIntroductionCreator {
 		System.out.println("\nInclude INFORMATION.txt inside the folder....");
 		System.out.println(
 				"INFORMATION.txt can contain non mandatory values this way: regEx=<your regular expression>;replaceWith=<matching data to be replaced with>");
-		System.out.println(
-				"Example: \nsubject=Bible Books Introduction\n"
-				+ "publisher=Publisher Name\n"
-				+ "title=Bible Books Introduction\n"
-				+ "subTitle=Introduction to all 66 books in the bible\n"
-				+ "author=Author Name\n"
-				+ "creator=Your Naame\n"
-				+ "descriptionTitle=Additional Details of this book:\n"
-				+ "description=Some description goes here\n"
-				+ "identifier=Some Unique Name without space\n"
-				+ "language=en\n"
-				+ "createZefaniaXML=no\t(it can take yes or no)\n"
-				+ "createWordDocument=yes\t(it can take yes or no)\n"
-				+ "titleFont=Uni Ila.Sundaram-08\r\n"
-				+ "titleFontSize=36\r\n"
-				+ "subTitleFont=Uni Ila.Sundaram-04\r\n"
-				+ "subTitleFontSize=16\r\n"
-				+ "authorFont=Uni Ila.Sundaram-08\r\n"
-				+ "authorFontSize=22\r\n"
-				+ "headerFont=Uni Ila.Sundaram-08\r\n"
-				+ "headerFontSize=16\r\n"
-				+ "contentFont=Uni Ila.Sundaram-04\r\n"
-				+ "contentFontSize=12\r\n"
-				+ "indexPageTitle=Index");
+		System.out.println("Example: \nsubject=Bible Books Introduction\n" + "publisher=Publisher Name\n"
+				+ "title=Bible Books Introduction\n" + "subTitle=Introduction to all 66 books in the bible\n"
+				+ "author=Author Name\n" + "creator=Your Naame\n"
+				+ "descriptionTitle=Additional Details of this book:\n" + "description=Some description goes here\n"
+				+ "identifier=Some Unique Name without space\n" + "language=en\n"
+				+ "createZefaniaXML=no\t(it can take yes or no)\n" + "createWordDocument=yes\t(it can take yes or no)\n"
+				+ "titleFont=Uni Ila.Sundaram-08\r\n" + "titleFontSize=36\r\n" + "subTitleFont=Uni Ila.Sundaram-04\r\n"
+				+ "subTitleFontSize=16\r\n" + "authorFont=Uni Ila.Sundaram-08\r\n" + "authorFontSize=22\r\n"
+				+ "headerFont=Uni Ila.Sundaram-08\r\n" + "headerFontSize=16\r\n" + "contentFont=Uni Ila.Sundaram-04\r\n"
+				+ "contentFontSize=12\r\n" + "indexPageTitle=Index");
 		System.out
 				.println("\nPlease use one file per book introduction. Directory should have the numbering prefixed.");
 		System.out.println("First line of the file will be used to create the indexes in the Index Page");
@@ -126,10 +113,9 @@ public class BibleBooksIntroductionCreator {
 		System.out.println("Exmple 1: 01-Genesis.txt, 02-Exodus.txt, etc");
 		System.out.println("Exmple 2: 1-Genesis.txt, 2-Exodus.txt, etc");
 		System.out.println(
-				"\nSyntax to run this progam:\njava -jar apply-regex-to-files.jar sourceDir=<Source Folder Name or Path> regexFile=<RegEx file name or file path>");
-		System.out.println("\nExample 1: java -jar apply-regex-to-files.jar sourceDir=directory1 regexFile=regex.txt");
-		System.out.println(
-				"Example 2: java -jar apply-regex-to-files.jar sourceDir=\"C:/somedirectory/directory1\" regexFile=\"C:/somedirectory/regex-config.ini\"");
+				"\nSyntax to run this progam:\njava -jar bible-books-introduction-creator.jar <Source Folder Name or Path>");
+		System.out.println("\nExample 1: java -jar bible-books-introduction-creator.jar directory1");
+		System.out.println("Example 2: java -jar bible-books-introduction-creator.jar \"C:/somedirectory/directory1\"");
 	}
 
 }
