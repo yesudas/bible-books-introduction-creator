@@ -7,7 +7,11 @@ package in.wordofgod.bible.books.introduction.creator;
  * 
  */
 public class Constants {
-	//ZefaniaXML
+
+	public static final String STR_GENERATE_CHAPTER_NO = "generateChapterNo";
+	public static final String STR_CREATE_WORD_DOCUMENT = "createWordDocument";
+
+	// ZefaniaXML
 	public static final String STR_LANGUAGE = "language";
 	public static final String STR_IDENTIFIER = "identifier";
 	public static final String STR_DESCRIPTION_TITLE = "descriptionTitle";
@@ -18,8 +22,8 @@ public class Constants {
 	public static final String STR_PUBLISHER_TITLE = "publisherTitle";
 	public static final String STR_PUBLISHER = "publisher";
 	public static final String STR_SUBJECT = "title";
-	
-	//Word Document
+
+	// Word Document
 	public static final String STR_SUB_TITLE = "subTitle";
 	public static final String STR_TITLE_FONT = "titleFont";
 	public static final String STR_TITLE_FONT_SIZE = "titleFontSize";
@@ -44,16 +48,15 @@ public class Constants {
 	public static final String STR_CONTACTUS = "contactUs";
 	public static final String STR_FOLLOWUS_TITLE = "followUsTitle";
 	public static final String STR_FOLLOWUS = "followUs";
-	
+
 	public static final String STR_INDEX_TITLE = "indexPageTitle";
-	
-	//Page settings
+
+	// Page settings
 	public static final String STR_PAGE_SIZE = "pageSize";
 	public static final String STR_MARGIN_TOP = "marginTop";
 	public static final String STR_MARGIN_BOTTOM = "marginBottom";
 	public static final String STR_MARGIN_LEFT = "marginLeft";
 	public static final String STR_MARGIN_RIGHT = "marginRight";
-	
 
 	public static final int PAGE_Letter_W = 612;
 	public static final int PAGE_Letter_H = 792;

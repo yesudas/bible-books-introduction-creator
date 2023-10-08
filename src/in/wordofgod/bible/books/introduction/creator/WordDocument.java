@@ -233,6 +233,7 @@ public class WordDocument {
 		CTBookmark bookmark = null;
 		BufferedReader reader = null;
 		File[] files = directory.listFiles();
+		int chapterNo = 1;
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];
 			if (BibleBooksIntroductionCreator.INFORMATION_FILE_NAME.equalsIgnoreCase(file.getName())
@@ -240,6 +241,10 @@ public class WordDocument {
 				continue;
 			}
 			String word = file.getName().substring(0, file.getName().lastIndexOf("."));
+			if ("yes".equalsIgnoreCase(
+					BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_GENERATE_CHAPTER_NO))) {
+				word = chapterNo + ". " + word;
+			}
 
 			// Display the word as header
 			paragraph = document.createParagraph();
@@ -257,7 +262,7 @@ public class WordDocument {
 
 			// Create bookmark for the word
 			bookmark = paragraph.getCTP().addNewBookmarkStart();
-			bookmark.setName(word.replaceAll(" ", "_"));
+			bookmark.setName(word.replace(" ", "_").replace(".", "_"));
 			bookmark.setId(BigInteger.valueOf(uniqueBookMarkCounter));
 			paragraph.getCTP().addNewBookmarkEnd().setId(BigInteger.valueOf(uniqueBookMarkCounter));
 			uniqueBookMarkCounter++;
@@ -274,7 +279,7 @@ public class WordDocument {
 					if (!line.equals("")) {
 
 						if (line.contains("[H1]")) {
-							buildH1Description(document, line, paragraph);
+							buildH1Description(document, line, paragraph, chapterNo++);
 						} else if (line.contains("[H2]")) {
 							buildH2Description(document, line);
 						} else if (line.contains("[H3]")) {
@@ -350,12 +355,16 @@ public class WordDocument {
 		run.setText(line);
 	}
 
-	private static void buildH1Description(XWPFDocument document, String line, XWPFParagraph paragraph) {
+	private static void buildH1Description(XWPFDocument document, String line, XWPFParagraph paragraph, int chapterNo) {
 		// Remove prefix text like 0001 used for identifying unique no of words
 		try {
 			line = line.replace(line.substring(0, line.indexOf("[H1]")), "");
 		} catch (StringIndexOutOfBoundsException e) {
 			e.printStackTrace();
+		}
+		if ("yes".equalsIgnoreCase(BibleBooksIntroductionCreator.BOOK_DETAILS
+				.getProperty(Constants.STR_GENERATE_CHAPTER_NO))) {
+			line = chapterNo + ". " + line;
 		}
 		// Remove the tag [H1]
 		line = line.replaceAll("\\[H1\\]", "").strip();
@@ -733,6 +742,7 @@ public class WordDocument {
 		// Words Index
 		paragraph = document.createParagraph();
 		paragraph.setSpacingAfter(0);
+		int chapterNo = 1;
 		for (File file : directory.listFiles()) {
 			if (BibleBooksIntroductionCreator.INFORMATION_FILE_NAME.equalsIgnoreCase(file.getName())) {
 				continue;
@@ -745,7 +755,11 @@ public class WordDocument {
 				BibleBooksIntroductionCreator.printHelpMessage();
 				return;
 			}
-			createAnchorLink(paragraph, word, word.replaceAll(" ", "_"), true, "",
+			if ("yes".equalsIgnoreCase(
+					BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_GENERATE_CHAPTER_NO))) {
+				word = chapterNo++ + ". " + word;
+			}
+			createAnchorLink(paragraph, word, word.replace(" ", "_").replace(".", "_"), true, "",
 					BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_CONTENT_FONT),
 					getFontSize(Constants.STR_CONTENT_FONT_SIZE));
 		}
@@ -771,6 +785,8 @@ public class WordDocument {
 			try {
 				line = line.replace(line.substring(0, line.indexOf("[H1]")), "");
 			} catch (StringIndexOutOfBoundsException e) {
+				System.out.println("Error processing the line: " + line);
+				System.out.println("This line found in the file: " + file.getName());
 				e.printStackTrace();
 			}
 			// Remove the tag [H1]

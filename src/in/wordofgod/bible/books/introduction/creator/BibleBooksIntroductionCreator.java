@@ -28,16 +28,16 @@ public class BibleBooksIntroductionCreator {
 
 	/**
 	 * @param args
+	 * @throws IOException
 	 */
-	public static void main(String[] args) throws ParserConfigurationException, TransformerException {
+	public static void main(String[] args) throws ParserConfigurationException, TransformerException, IOException {
 
 		if (!validateInput(args)) {
 			return;
 		}
-		;
 
 		loadBookDetails();
-		if ("yes".equalsIgnoreCase(BOOK_DETAILS.getProperty("createWordDocument"))) {
+		if ("yes".equalsIgnoreCase(BOOK_DETAILS.getProperty(Constants.STR_CREATE_WORD_DOCUMENT))) {
 			WordDocument.build();
 		}
 	}
@@ -72,7 +72,7 @@ public class BibleBooksIntroductionCreator {
 		return true;
 	}
 
-	private static void loadBookDetails() {
+	private static void loadBookDetails() throws IOException {
 		BOOK_DETAILS = new Properties();
 		BufferedReader propertyReader;
 		try {
@@ -82,10 +82,19 @@ public class BibleBooksIntroductionCreator {
 			propertyReader.close();
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
+			System.out.println("INFORMATION.txt file is missing, it is mandatory to continue..");
+			printHelpMessage();
+			throw e1;
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
+			System.out.println("INFORMATION.txt file is missing, it is mandatory to continue..");
+			printHelpMessage();
+			throw e1;
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("INFORMATION.txt file is missing, it is mandatory to continue..");
+			printHelpMessage();
+			throw e;
 		}
 	}
 
