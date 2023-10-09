@@ -278,11 +278,14 @@ public class WordDocument {
 					line = line.strip();
 					if (!line.equals("")) {
 
-						if (line.contains("[H1]")) {
+						if (line.contains("[H1]") || line.contains("[H1[") || line.contains("[H1")
+								|| line.contains("]H1]") || line.contains("]H1[") || line.contains("]H1")) {
 							buildH1Description(document, line, paragraph, chapterNo++);
-						} else if (line.contains("[H2]")) {
+						} else if (line.contains("[H2]") || line.contains("[H2[") || line.contains("[H2")
+								|| line.contains("]H2]") || line.contains("]H2[") || line.contains("]H2")) {
 							buildH2Description(document, line);
-						} else if (line.contains("[H3]")) {
+						} else if (line.contains("[H3]") || line.contains("[H3[") || line.contains("[H3")
+								|| line.contains("]H3]") || line.contains("]H3[") || line.contains("]H3")) {
 							buildH3Description(document, line);
 						} else {
 							buildDescription(document, line, null, false);
@@ -331,7 +334,7 @@ public class WordDocument {
 
 	private static void buildH3Description(XWPFDocument document, String line) {
 		// Remove the tag [H3]
-		line = line.replaceAll("\\[H3\\]", "").strip();
+		line = stripHeaderTags(line, "H3");
 		XWPFParagraph paragraph = document.createParagraph();
 		// paragraph.setStyle("Heading 3");
 		paragraph.setAlignment(ParagraphAlignment.LEFT);
@@ -344,7 +347,7 @@ public class WordDocument {
 
 	private static void buildH2Description(XWPFDocument document, String line) {
 		// Remove the tag [H2]
-		line = line.replaceAll("\\[H2\\]", "").strip();
+		line = stripHeaderTags(line, "H2");
 		XWPFParagraph paragraph = document.createParagraph();
 		// paragraph.setStyle("Heading 2");
 		paragraph.setAlignment(ParagraphAlignment.LEFT);
@@ -362,12 +365,12 @@ public class WordDocument {
 		} catch (StringIndexOutOfBoundsException e) {
 			e.printStackTrace();
 		}
-		if ("yes".equalsIgnoreCase(BibleBooksIntroductionCreator.BOOK_DETAILS
-				.getProperty(Constants.STR_GENERATE_CHAPTER_NO))) {
+		if ("yes".equalsIgnoreCase(
+				BibleBooksIntroductionCreator.BOOK_DETAILS.getProperty(Constants.STR_GENERATE_CHAPTER_NO))) {
 			line = chapterNo + ". " + line;
 		}
 		// Remove the tag [H1]
-		line = line.replaceAll("\\[H1\\]", "").strip();
+		line = stripHeaderTags(line, "H1");
 		// XWPFParagraph paragraph = document.createParagraph();
 		// Keep the title always in the middle
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
@@ -381,6 +384,18 @@ public class WordDocument {
 		run.setFontSize(getFontSize(Constants.STR_CONTENT_FONT_SIZE) + 6);
 		run.setBold(true);
 		run.setText(line);
+	}
+
+	private static String stripHeaderTags(String line, String headerTag) {
+		line = line.replaceAll("\\[" + headerTag + "\\]", "").strip();
+		line = line.replaceAll("\\[" + headerTag + "\\[", "").strip();
+		line = line.replaceAll("\\[" + headerTag + "", "").strip();
+
+		line = line.replaceAll("\\]" + headerTag + "\\[", "").strip();
+		line = line.replaceAll("\\]" + headerTag + "\\]", "").strip();
+		line = line.replaceAll("\\]" + headerTag + "\\[", "").strip();
+		line = line.replaceAll("\\]" + headerTag + "", "").strip();
+		return line;
 	}
 
 	private static void createBookDetailsPage(XWPFDocument document) {
