@@ -10,6 +10,7 @@ public class Constants {
 
 	public static final String STR_GENERATE_CHAPTER_NO = "generateChapterNo";
 	public static final String STR_CREATE_WORD_DOCUMENT = "createWordDocument";
+	public static final String STR_CREATE_FOR_MYBIBLE_APP = "createForMyBibleApp";
 
 	// ZefaniaXML
 	public static final String STR_LANGUAGE = "language";

@@ -40,6 +40,9 @@ public class BibleBooksIntroductionCreator {
 		if ("yes".equalsIgnoreCase(BOOK_DETAILS.getProperty(Constants.STR_CREATE_WORD_DOCUMENT))) {
 			WordDocument.build();
 		}
+		if ("yes".equalsIgnoreCase(BOOK_DETAILS.getProperty(Constants.STR_CREATE_FOR_MYBIBLE_APP))) {
+			MyBibleZone.build();
+		}
 	}
 
 	private static boolean validateInput(String[] args) {
